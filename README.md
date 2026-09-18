@@ -25,15 +25,16 @@ schedule work, or grant device access. A single capable agent is sufficient.
    prompt. The agent chooses the implementation and maintains progress in files.
 
 ```mermaid
-flowchart LR
-    D[Discuss the objective] --> S[Setup prompt:<br/>capture intent in PROJECT.md]
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '18px'}}}%%
+flowchart TD
+    D[Discuss the objective] --> S[Setup prompt:<br/>capture intent]
     S --> L[Loop prompt:<br/>autonomous engineering]
+    RS[Interrupted, or a new agent] --> L
     L --> G{Hardware project?}
     G -->|No| V[VALIDATED]
-    G -->|Yes| RG[Candidate review gate:<br/>AWAITING_HUMAN_REVIEW]
-    RG -->|Explicit candidate approval| HV[Hardware validation]
+    G -->|Yes| RG[Candidate review gate]
+    RG -->|Explicit approval| HV[Hardware validation]
     HV --> V
-    L -.->|Interrupted or new agent| L
 ```
 
 Setup runs once per project. The loop prompt is reusable: every later session,
@@ -149,20 +150,20 @@ dead end is not retried. See the
 [persistent loop robustness rules](AGENTS.md#persistent-loop-robustness).
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '18px'}}}%%
 flowchart TD
-    R[Session starts or resumes] --> RC[Reconcile Loop continuity:<br/>owner, in-flight action, ruled-out list]
-    RC --> IF{In-flight action recorded?}
-    IF -->|Yes| VF[Outcome is UNKNOWN:<br/>verify actual state, never assume]
-    IF -->|No| CH[Choose the next action,<br/>skipping anything already ruled out]
+    R[Session starts or resumes] --> RC[Reconcile Loop continuity]
+    RC --> IF{In-flight action?}
+    IF -->|Yes| VF[Outcome UNKNOWN:<br/>verify actual state]
+    IF -->|No| CH[Choose next action:<br/>skip what is ruled out]
     VF --> CH
-    CH --> WA[Record intent before an<br/>irreversible or long action]
-    WA --> AC[Act]
-    AC --> WR[1. Write records and artifacts]
-    WR --> US[2. Update STATE.md to reference them]
-    US --> CL[3. Clear the in-flight entry]
-    CL --> PG{New evidence this cycle?}
+    CH --> WA[Record intent, then act]
+    WA --> WR[1. Write records and artifacts]
+    WR --> US[2. Update STATE.md]
+    US --> CL[3. Clear in-flight entry]
+    CL --> PG{New evidence?}
     PG -->|Yes| CH
-    PG -->|No| ES[Change approach, rule it out,<br/>or escalate one specific question]
+    PG -->|No| ES[Change approach,<br/>rule out, or escalate]
     ES --> CH
 ```
 
