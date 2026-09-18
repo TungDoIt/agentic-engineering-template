@@ -40,6 +40,17 @@ All notable changes to this template are documented here. The format is based on
 
 ### Changed
 
+- Rewrote the persistent engineering loop prompt. It no longer restates the
+  hardware phase chain, stopping conditions, or file list that `AGENTS.md` owns —
+  that duplication was a second source of truth and had already gone stale
+  (it omitted `records/HUMAN_INPUTS.md` and the Loop continuity reconciliation).
+  The prompt now points at `AGENTS.md` and spends its words on what a file cannot
+  carry: ownership, working through many actions rather than stopping to report
+  after one, deciding routine reversible things without asking, and checkpointing
+  before stopping. The one deliberate redundancy is safety-relevant — an explicit
+  line not to touch hardware before approval. Dropped the subagent instruction,
+  which is the harness's decision and is covered by `AGENTS.md`.
+  `.claude/commands/loop.md` is kept byte-identical to the README prompt.
 - `ARCHITECTURE.md`: the engineering loop diagram now shows resume reconciliation,
   reading the ruled-out list before choosing an action, recording intent before
   irreversible actions, clearing the in-flight entry on state update, and the
