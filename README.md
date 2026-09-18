@@ -25,7 +25,7 @@ schedule work, or grant device access. A single capable agent is sufficient.
    prompt. The agent chooses the implementation and maintains progress in files.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '18px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '18px', 'lineColor': '#768390'}}}%%
 flowchart TD
     D[Discuss the objective] --> S[Setup prompt:<br/>capture intent]
     S --> L[Loop prompt:<br/>autonomous engineering]
@@ -161,7 +161,7 @@ dead end is not retried. See the
 [persistent loop robustness rules](AGENTS.md#persistent-loop-robustness).
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '18px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '18px', 'lineColor': '#768390'}}}%%
 flowchart TD
     R[Session starts or resumes] --> RC[Reconcile Loop continuity]
     RC --> IF{In-flight action?}
