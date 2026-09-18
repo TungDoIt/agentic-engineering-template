@@ -24,6 +24,21 @@ schedule work, or grant device access. A single capable agent is sufficient.
    [PROJECT.md](PROJECT.md), correct anything needed, then send the reusable loop
    prompt. The agent chooses the implementation and maintains progress in files.
 
+```mermaid
+flowchart LR
+    D[Discuss the objective] --> S[Setup prompt:<br/>capture intent in PROJECT.md]
+    S --> L[Loop prompt:<br/>autonomous engineering]
+    L --> G{Hardware project?}
+    G -->|No| V[VALIDATED]
+    G -->|Yes| RG[Candidate review gate:<br/>AWAITING_HUMAN_REVIEW]
+    RG -->|Explicit candidate approval| HV[Hardware validation]
+    HV --> V
+    L -.->|Interrupted or new agent| L
+```
+
+Setup runs once per project. The loop prompt is reusable: every later session,
+including a fresh agent, re-enters at the same point using the saved files.
+
 ### PROJECT SETUP PROMPT
 
 ```text
@@ -124,6 +139,36 @@ validation, without a hardware gate.
 Read STATE.md for requirement statuses (`PASS`, `FAIL`, `UNTESTED`, `BLOCKED`),
 current configuration, priority, next action, and any exact human action needed.
 Follow its evidence links for details.
+
+STATE.md's Loop continuity section is what makes a long-running project safe to
+interrupt: it names the current checkpoint owner, any in-flight action whose
+outcome is unknown, how many attempts the current gap has taken, and the
+approaches already ruled out. A successor resolves that section before dependent
+work, so an interrupted operation is verified rather than assumed and a known
+dead end is not retried. See the
+[persistent loop robustness rules](AGENTS.md#persistent-loop-robustness).
+
+```mermaid
+flowchart TD
+    R[Session starts or resumes] --> RC[Reconcile Loop continuity:<br/>owner, in-flight action, ruled-out list]
+    RC --> IF{In-flight action recorded?}
+    IF -->|Yes| VF[Outcome is UNKNOWN:<br/>verify actual state, never assume]
+    IF -->|No| CH[Choose the next action,<br/>skipping anything already ruled out]
+    VF --> CH
+    CH --> WA[Record intent before an<br/>irreversible or long action]
+    WA --> AC[Act]
+    AC --> WR[1. Write records and artifacts]
+    WR --> US[2. Update STATE.md to reference them]
+    US --> CL[3. Clear the in-flight entry]
+    CL --> PG{New evidence this cycle?}
+    PG -->|Yes| CH
+    PG -->|No| ES[Change approach, rule it out,<br/>or escalate one specific question]
+    ES --> CH
+```
+
+The numbered write order is what makes an interruption detectable: a crash
+leaves unreferenced evidence that reconciliation finds, rather than a checkpoint
+claiming evidence that was never written.
 
 A fresh agent using the [persistent loop prompt](#persistent-engineering-loop-prompt)
 checks the checkpoint against actual artifacts and relevant evidence, reconciling
