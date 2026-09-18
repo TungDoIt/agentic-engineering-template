@@ -32,6 +32,11 @@ All notable changes to this template are documented here. The format is based on
 - Validator checks that the loop-continuity fields exist, that the template ships
   with no outstanding in-flight action, and that the robustness rules are present
   in `AGENTS.md`.
+- README visual guides: a project lifecycle diagram (discussion → setup → loop →
+  review gate → validated) and a persistence diagram showing resume
+  reconciliation, intent-before-action, the numbered write order, and the
+  no-new-evidence path. Both stay higher level than the detailed diagrams in
+  `ARCHITECTURE.md`.
 
 ### Changed
 
