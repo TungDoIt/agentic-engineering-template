@@ -125,6 +125,14 @@ Read STATE.md for requirement statuses (`PASS`, `FAIL`, `UNTESTED`, `BLOCKED`),
 current configuration, priority, next action, and any exact human action needed.
 Follow its evidence links for details.
 
+STATE.md's Loop continuity section is what makes a long-running project safe to
+interrupt: it names the current checkpoint owner, any in-flight action whose
+outcome is unknown, how many attempts the current gap has taken, and the
+approaches already ruled out. A successor resolves that section before dependent
+work, so an interrupted operation is verified rather than assumed and a known
+dead end is not retried. See the
+[persistent loop robustness rules](AGENTS.md#persistent-loop-robustness).
+
 A fresh agent using the [persistent loop prompt](#persistent-engineering-loop-prompt)
 checks the checkpoint against actual artifacts and relevant evidence, reconciling
 unfinished operations and stale validation before continuing. A restart does not
