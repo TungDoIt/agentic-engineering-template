@@ -87,9 +87,17 @@ human wording and source, separate from interpretation, with links to affected
 intent, state, or evidence. Routine chat and transcripts are omitted. STATE.md
 tracks the last applied input so successors can find newly recorded steering.
 
-The repository also has a `.gitignore`, historical requests in `prompt log/`, and
+The repository also has a `.gitignore`, historical requests in `prompt-log/`, and
 maintainer notes in `docs/TEMPLATE_REVIEW.md`. These are optional extras; the two
 prompts above and AGENTS.md provide current operating guidance.
+
+For Claude Code users, `CLAUDE.md` points at these same files and
+`.claude/commands/setup.md` and `.claude/commands/loop.md` expose the two prompts
+above as `/setup` and `/loop`. Maintainers can run
+`python3 tools/validate_template.py .` to check the template's structure and that
+STATE.md / outputs/REPORT.md remain uninitialized; the same check runs in CI
+(`.github/workflows/validate.yml`). See `CHANGELOG.md` for template history and
+`LICENSE` (MIT) for reuse terms.
 
 ## How work proceeds
 
